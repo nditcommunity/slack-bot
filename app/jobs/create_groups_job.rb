@@ -8,15 +8,9 @@ class CreateGroupsJob < ApplicationJob
     def perform
       Rails.logger.info("Running CreateGroupsJob")
       date = Date.today
-      if date.monday? && date.mday <= 7
-        if ENV["PAIRING_CHANNEL"].present?
-          Rails.logger.info("It's the first Monday of the month! Generating pairs!")
-          create_pairs
-        end
-        if ENV["GROUPS_CHANNEL"].present?
-          Rails.logger.info("It's a Monday on the right week! Generating groups!")
-          create_groups
-        end
+      if ENV["PAIRING_CHANNEL"].present?
+        Rails.logger.info("It's the first Monday of the month! Generating pairs!")
+        create_pairs
       end
     end
 
@@ -28,16 +22,6 @@ class CreateGroupsJob < ApplicationJob
       pairs = balance_pairs(pairs)
       start_conversations(groups: pairs, type: :pairing)
       Rails.logger.info("Started conversations with #{pairs.count} pairs")
-    end
-
-    # Gets the users from the groups channel (stored as an environment variable), groups,
-    # balances groups (so there isn't a group of less than 3), and starts the conversations
-    def create_groups
-      members = Slack::Client.get_channel_users(channel_id: ENV["GROUPS_CHANNEL"])
-      groups = group_members(members: members, group_size: MAX_GROUP_SIZE)
-      groups = balance_groups(groups)
-      start_conversations(groups: groups, type: :groups)
-      Rails.logger.info("Started conversations with #{groups.count} groups")
     end
 
     # Randomizes the list of members, shifts (take the top) X members (where X is group_size), and returns the array
@@ -62,21 +46,6 @@ class CreateGroupsJob < ApplicationJob
         pairs.pop # [[1,2,3]]
       end
       pairs
-    end
-
-    # Balances the group arrays to ensure that there are no groups smaller than 3
-    #
-    # @param groups [Array of Array of Strings] current groups of channel members, ex: [["U1234", "U2345", "U3456", "U4567"], ["U5678", "U6789"]]
-    # @return [Array of Array of Strings] balanced group of channel members, ex: [["U1234", "U2345", "U3456"], ["U4567", "U5678", "U6789"]]
-    def balance_groups(groups)
-      return groups if groups.length < 2
-
-      i = -2
-      while groups.last.length < (MAX_GROUP_SIZE - 1)
-        groups.last << groups[i].pop
-        i -= 1
-      end
-      groups
     end
 
     # Starts up the conversations for each group

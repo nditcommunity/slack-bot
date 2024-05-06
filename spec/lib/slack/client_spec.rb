@@ -14,17 +14,6 @@ RSpec.describe Slack::Client do
       allow(client).to receive(:chat_postMessage).with(channel: 2, blocks: expected_message)
       Slack::Client.create_conversation(group: ["123", "456"], type: :pairing, client: client)
     end
-
-    it "creates a group conversation" do
-      conversation = OpenStruct.new
-      channel = OpenStruct.new
-      channel.id = 2
-      conversation.channel = channel
-      expected_message = SlackMessage.group_message(group: ["123", "456", "789"])
-      allow(client).to receive(:conversations_open).with(users: "123,456,789").and_return(conversation)
-      allow(client).to receive(:chat_postMessage).with(channel: 2, blocks: expected_message)
-      Slack::Client.create_conversation(group: ["123", "456", "789"], type: :groups, client: client)
-    end
   end
 
   context "sends a mod message" do
@@ -83,7 +72,7 @@ RSpec.describe Slack::Client do
       channel.id = 2
       conversation.channel = channel
       message = "I could not find that channel. Please check the name against \"help\"."
-      allow(client).to receive(:conversations_invite).with(channel: "C01SYB3QMNW", users: "1235").and_return(Slack::Web::Api::Errors::ChannelNotFound)
+      allow(client).to receive(:conversations_invite).with(channel: "C06V26ZBMQA", users: "1235").and_return(Slack::Web::Api::Errors::ChannelNotFound)
       allow(client).to receive(:conversations_open).with(users: "1235").and_return(conversation)
       expect(client).to receive(:chat_postMessage).with({channel: 2, text: message})
       Slack::Client.add_user_to_channel(
@@ -107,7 +96,7 @@ RSpec.describe Slack::Client do
     end
 
     it "adds user to channel" do
-      expect(client).to receive(:conversations_invite).with({channel: "C01SYB3QMNW", users: "1235"})
+      expect(client).to receive(:conversations_invite).with({channel: "C06V26ZBMQA", users: "1235"})
       Slack::Client.add_user_to_channel(
         user_id: "1235",
         channel_id: "6890",
@@ -118,7 +107,7 @@ RSpec.describe Slack::Client do
     end
 
     it "cannot find the channel" do
-      expect(client).to receive(:conversations_invite).with({channel: "C01SYB3QMNW", users: "1235"}).and_raise(Slack::Web::Api::Errors::ChannelNotFound.new("bipoc"))
+      expect(client).to receive(:conversations_invite).with({channel: "C06V26ZBMQA", users: "1235"}).and_raise(Slack::Web::Api::Errors::ChannelNotFound.new("bipoc"))
       expect(client).to receive(:chat_postEphemeral).with({channel: "6890", user: "1235", text: "I could not find that channel. Please check the name against \"help\" or contact Jennifer with channel name: bipoc."})
       Slack::Client.add_user_to_channel(
         user_id: "1235",
@@ -130,7 +119,7 @@ RSpec.describe Slack::Client do
     end
 
     it "errors if the user is already in the channel" do
-      expect(client).to receive(:conversations_invite).with({channel: "C01SYB3QMNW", users: "1235"}).and_raise(Slack::Web::Api::Errors::AlreadyInChannel.new("bipoc"))
+      expect(client).to receive(:conversations_invite).with({channel: "C06V26ZBMQA", users: "1235"}).and_raise(Slack::Web::Api::Errors::AlreadyInChannel.new("bipoc"))
       expect(client).to receive(:chat_postEphemeral).with({channel: "6890", user: "1235", text: "Slack seems to think you are already in that channel! Please check your existing channel list for #bipoc."})
       Slack::Client.add_user_to_channel(
         user_id: "1235",
@@ -142,7 +131,7 @@ RSpec.describe Slack::Client do
     end
 
     it "lets the user know if there is a random error" do
-      expect(client).to receive(:conversations_invite).with({channel: "C01SYB3QMNW", users: "1235"}).and_raise(Slack::Web::Api::Errors::ChannelCannotBeUnshared.new("oh no"))
+      expect(client).to receive(:conversations_invite).with({channel: "C06V26ZBMQA", users: "1235"}).and_raise(Slack::Web::Api::Errors::ChannelCannotBeUnshared.new("oh no"))
       expect(client).to receive(:chat_postEphemeral).with({channel: "6890", user: "1235", text: "There was an error! Please check bipoc against list in help.\nIf it looks like a bug, please copy and send this message to Jennifer Konikowski:\noh no"})
       expect {
         Slack::Client.add_user_to_channel(

@@ -4,18 +4,13 @@ module SlackMessage
 
   # constant for channel ids and descriptions for identity channels
   CHANNELS = {
-    bipoc: {channel_id: "C01SYB3QMNW", description: "for anyone who identifies as BIPOC"},
-    cheersqueers: {channel_id: "C01T4KG9UUU", description: "LGBTQA+"},
-    latinidad: {channel_id: "C01SJ0F510F", description: "for Latinx APers"},
-    aapi: {channel_id: "C01TNFWDA9W", description: "for Asian and Pacific Islander APers"},
-    south_asian: {channel_id: "C01SXKU357Y", description: "for South Asian APers"},
-    accountabilibuddies: {channel_id: "C021TR2N5FZ", description: "for fitness/weight loss accountability"},
-    dungeons_and_dragons: {channel_id: "C0257UWRF8A", description: "if you want to play D&D"},
-    wakanda: {channel_id: "C01SYCRDFCJ", description: "for Black APers"},
-    bipolar_bpd_support: {channel_id: "C04RFB6NCG5", description: "safe space for talking about the highs and lows of mood management"},
-    nonmonogamy: {channel_id: "C03DRR18DEU", description: "safe space for discussing the ins and outs of nonmonogamy"},
-    plus_size_party: {channel_id: "C01U01RDN06", description: "for plus-size APers"},
-    submissions_september: {channel_id: "C05RZM5C8UE", description: "for submissions September accountability group"}
+    thirty_five_plus: {channel_id: "C070AHYHKHN", description: "for anyone 35 and older"},
+    bipoc: {channel_id: "C06V26ZBMQA", description: "for anyone who identifies as BIPOC"},
+    marginalized_genders: {channel_id: "C067HKZ219C", description: "not a cis dude? this channel's for you!"},
+    nonbinary: {channel_id: "C06866GL9BN", description: "for nonbinary folks"},
+    queer: {channel_id: "C067M825K6Z", description: "for LGBTQIA+ folks"},
+    trans: {channel_id: "C068SG4F140", description: "for anyone who identifies as trans"},
+    women: {channel_id: "C068GBV8V09", description: "for anyone who identifies as a woman"}
   }
 
   # Generates help message for identity channels
@@ -28,18 +23,13 @@ module SlackMessage
         block_id: "help_message",
         text: {
           type: "mrkdwn",
-          text: "*bipoc:* #{CHANNELS[:bipoc][:description]}
-*cheersqueers:* #{CHANNELS[:cheersqueers][:description]}
-*latinidad:* #{CHANNELS[:latinidad][:description]}
-*aapi:* #{CHANNELS[:aapi][:description]}
-*south_asian:* #{CHANNELS[:south_asian][:description]}
-*wakanda:* #{CHANNELS[:wakanda][:description]}
-*accountabilibuddies:* #{CHANNELS[:accountabilibuddies][:description]}
-*dungeons_and_dragons:* #{CHANNELS[:dungeons_and_dragons][:description]}
-*bipolar_bpd_support:* #{CHANNELS[:bipolar_bpd_support][:description]}
-*nonmonogamy:* #{CHANNELS[:nonmonogamy][:description]}
-*plus_size_party:* #{CHANNELS[:plus_size_party][:description]}
-*submissions_september:* #{CHANNELS[:submissions_september][:description]}
+          text: "*thirty_five_plus*: #{CHANNELS[:thirty_five_plus][:description]}
+*bipoc:* #{CHANNELS[:bipoc][:description]}
+*marginalized_genders:* #{CHANNELS[:marginalized_genders][:description]}
+*nonbinary:* #{CHANNELS[:nonbinary][:description]}
+*queer:* #{CHANNELS[:queer][:description]}
+*trans:* #{CHANNELS[:trans][:description]}
+*women:* #{CHANNELS[:women][:description]}
 "
         }
       }
@@ -59,24 +49,6 @@ module SlackMessage
         text: {
           type: "mrkdwn",
           text: ":wave: Hi #{pair_usernames}! You've both been paired up for a coffee chat from <##{ENV["PAIRING_CHANNEL"]}>! Find a time to meet (Calendly is great for this) and have fun!"
-        }
-      }
-    ]
-  end
-
-  # Generates the group message for a group of users
-  #
-  # @param group [Array of Arrays of Strings] groups of users, ex: [["U1234", "U2345", "U3456", "U4567"]]
-  # @return [JSON] message content fitting Slack's block kit requirements
-  def group_message(group:)
-    group_usernames = group.map { |user| "<@#{user}>" }.to_sentence
-    [
-      {
-        type: "section",
-        block_id: "group_introduction",
-        text: {
-          type: "mrkdwn",
-          text: ":wave: Hi #{group_usernames}! You've both been grouped up for a coffee chat from <##{ENV["GROUPS_CHANNEL"]}>! Find a time to meet and have fun!"
         }
       }
     ]

@@ -91,11 +91,10 @@ If it looks like a bug, please copy and send this message to Jennifer Konikowski
     # @return [Array of Strings] array of channel users, ex: ["U1234", "U2345", "U3456"]
     def self.get_channel_users(channel_id:, client: nil)
       client ||= default_client # if nil, set = to default
-      members = client.conversations_members(
+      client.conversations_members(
         channel: channel_id,
         limit: 10_000
       )
-      members.members.reject { |m| m == "U02F2U3RQKS" } # reject channitor!
     end
 
     # Creates conversations for a group. Conversation must first be initialized and then the channel id for that conversation should get passed in to `postMessage`
