@@ -23,6 +23,7 @@ RSpec.describe Slack::Client do
       ENV["MOD_CHANNEL"] = "678"
       message = SlackMessage.mod_message(user_id: "123", channel_id: "345", channel_name: "test", text: "something is awry")
       expect(client).to receive(:chat_postMessage).with(channel: "678", blocks: message)
+      expect(client).to receive(:chat_postEphemeral).with(channel: "345", text: "Your message has been sent to the mods.", user: "123")
       Slack::Client.send_mod_message(user_id: "123", channel_id: "345", channel_name: "test", text: "something is awry", client: client)
     end
 

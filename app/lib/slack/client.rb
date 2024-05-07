@@ -137,6 +137,11 @@ If it looks like a bug, please copy and send this message to Jennifer Konikowski
             text: text
           )
         )
+        client.chat_postEphemeral(
+          channel: channel_id,
+          user: user_id,
+          text: "Your message has been sent to the mods."
+        )
       rescue => e
         client.chat_postEphemeral(
           channel: channel_id,
