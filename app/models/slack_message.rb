@@ -10,7 +10,7 @@ module SlackMessage
     nonbinary: {channel_id: "C06866GL9BN", description: "for nonbinary folks"},
     queer: {channel_id: "C067M825K6Z", description: "for LGBTQIA+ folks"},
     trans: {channel_id: "C068SG4F140", description: "for anyone who identifies as trans"},
-    women: {channel_id: "C068GBV8V09", description: "for anyone who identifies as a woman"}
+    women: {channel_id: "C068GBV8V09", description: "for anyone who identifies as a woman"},
     physical_disability: {channel_id: "C074GQJMHN2", description: "for anyone with a physical disability"}
   }
 
