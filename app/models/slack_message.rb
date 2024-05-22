@@ -11,6 +11,7 @@ module SlackMessage
     queer: {channel_id: "C067M825K6Z", description: "for LGBTQIA+ folks"},
     trans: {channel_id: "C068SG4F140", description: "for anyone who identifies as trans"},
     women: {channel_id: "C068GBV8V09", description: "for anyone who identifies as a woman"}
+    physical_disability: {channel_id: "C074GQJMHN2", description: "for anyone with a physical disability"}
   }
 
   # Generates help message for identity channels
@@ -30,6 +31,7 @@ module SlackMessage
 *queer:* #{CHANNELS[:queer][:description]}
 *trans:* #{CHANNELS[:trans][:description]}
 *women:* #{CHANNELS[:women][:description]}
+*physical_disability:* #{CHANNELS[:physical_disability][:description]}
 "
         }
       }
